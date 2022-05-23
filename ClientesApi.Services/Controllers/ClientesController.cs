@@ -32,7 +32,7 @@ namespace ClientesApi.Services.Controllers
         }
 
         [HttpGet("{idCliente}")]
-        public IActionResult GetAll(Guid idCliente)
+        public IActionResult GetById(Guid idCliente)
         {
             return Ok();
         }
