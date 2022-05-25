@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "1854a640-8c74-4813-924a-1d1f63d85843": {
+      "ProjectGuid": "1854a640-8c74-4813-924a-1d1f63d85843",
+      "DisplayName": "ClientesApi.Services",
+      "ColorIndex": 0
+    },
+    "e0716b87-dc77-44b9-a061-1041971085ad": {
+      "ProjectGuid": "e0716b87-dc77-44b9-a061-1041971085ad",
+      "DisplayName": "ClientesApi.Infra.Data",
+      "ColorIndex": 1
+    },
+    "71dff794-9e24-4204-998f-7e4776366b70": {
+      "ProjectGuid": "71dff794-9e24-4204-998f-7e4776366b70",
+      "DisplayName": "ClientesApi.Tests",
+      "ColorIndex": 2
+    }
+  },
+  "NextColorIndex": 3
+}

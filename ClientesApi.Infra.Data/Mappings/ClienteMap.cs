@@ -29,7 +29,7 @@ namespace ClientesApi.Infra.Data.Mappings
             builder.Property(c => c.Email).HasColumnName("Email").HasMaxLength(50).IsRequired();
             builder.Property(c => c.Cpf).HasColumnName("Cpf").HasMaxLength(14).IsRequired();
             builder.Property(c => c.DataNascimento).HasColumnName("DataNascimento").IsRequired();
-            
+
         }
     }
 }
