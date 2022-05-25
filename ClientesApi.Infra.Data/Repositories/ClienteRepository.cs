@@ -46,5 +46,11 @@ namespace ClientesApi.Infra.Data.Repositories
         {
             return _sqlServerContext.Cliente.Find(id);
         }
+
+        public Cliente BuscarPorEmail(string email)
+        {
+            return _sqlServerContext.Cliente
+                .FirstOrDefault(c => c.Email.Equals(email));
+        }
     }
 }
