@@ -1,38 +1,160 @@
+using ClientesApi.Services.Requests;
+//using Bogus;
+using FluentAssertions;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System;
+using System.Threading.Tasks;
 using Xunit;
+using System.Text;
+using ClientesApi.Tests.Config;
+using ClientesApi.Infra.Data.Entities;
+using Bogus;
 
 namespace ClientesApi.Tests
 {
     public class ClientesTests
     {
-        [Fact(Skip = "Não implementado")]
-        public void Test_Post_Retorns_OK()
+        private readonly string _endpoint;
+
+        public ClientesTests()
         {
+            _endpoint = ApiConfig.GetEndpoint() + "/Clientes";
+        }
+
+        [Fact]
+        public async Task<ClienteResult> Test_Post_Returns_Ok()
+        {
+            var httpClient = new HttpClient();
+            /*
+            var faker = new Faker("pt_BR");
+
+            var request = new ClientePostRequest()
+            {
+                Nome = faker.Person.FullName,
+                Cpf = "12345678901",
+                DataNascimento = DateTime.UtcNow,
+                Email = faker.Person.Email.ToLower()
+            };
+
+            var Content = new StringContent
+                (JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            */
+            var response = await httpClient.PostAsync(_endpoint, CreateDadosDeCliente());
+
+            response
+                .StatusCode
+                .Should()
+                .Be(HttpStatusCode.Created);
+
+            var result = JsonConvert.DeserializeObject<ClienteResult>
+               (response.Content.ReadAsStringAsync().Result);
+
+            return result;
+        }
+
+        [Fact]
+        public async Task Test_Put_Returns_OK()
+        {
+            var result = await Test_Post_Returns_Ok();
+
+            var httpClient = new HttpClient();
+
+            var faker = new Faker("pt_BR");
+
+            var request = new ClientePutRequest
+            {
+                IdCliente = result.cliente.IdCliente,
+                Nome = faker.Person.FullName,
+                Cpf = "12345678902",
+                DataNascimento = DateTime.UtcNow,
+                Email = faker.Person.Email.ToLower()
+            };
+
+            var content = new StringContent
+                (JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+
+            var response = await httpClient.PutAsync(_endpoint, content);
+
+            response
+               .StatusCode
+               .Should()
+               .Be(HttpStatusCode.OK);
+        }
+
+        [Fact]
+        public async Task Test_Delete_Returns_OK()
+        {
+            var result = await Test_Post_Returns_Ok();
+            var httpClient = new HttpClient();
+
+            var response = await httpClient.DeleteAsync(_endpoint + "/" + result.cliente.IdCliente);
+
+            response
+               .StatusCode
+               .Should()
+               .Be(HttpStatusCode.OK);
 
         }
 
-        [Fact(Skip = "Não implementado")]
-        public void Test_Put_Retorns_OK()
+        [Fact]
+        public async Task Test_GetAll_Returns_OK()
         {
+            await Test_Post_Returns_Ok();
 
+            var httpClient = new HttpClient();
+
+            var response = await httpClient.GetAsync(_endpoint);
+
+            var result = JsonConvert.DeserializeObject<List<Cliente>>
+               (response.Content.ReadAsStringAsync().Result);
+
+            result.
+                Should()
+                .NotBeNullOrEmpty();
         }
 
-        [Fact(Skip = "Não implementado")]
-        public void Test_Delete_Retorns_OK()
+        [Fact]
+        public async Task Test_GetById_Returns_OK()
         {
+            var result = await Test_Post_Returns_Ok();
+
+            var httpClient = new HttpClient();
+
+            var response = await httpClient.GetAsync(_endpoint + "/" + result.cliente.IdCliente);
+
+            var resposta = JsonConvert.DeserializeObject<Cliente>
+               (response.Content.ReadAsStringAsync().Result);
+
+            resposta
+                .Should()
+                .NotBeNull();
 
         }
-
-        [Fact(Skip = "Não implementado")]
-        public void Test_GetAll_Retorns_OK()
+        private StringContent CreateDadosDeCliente()
         {
+            var faker = new Faker("pt_BR");
 
-        }
+            var request = new ClientePostRequest()
+            {
+                Nome = faker.Person.FullName,
+                Cpf = "12345678901",
+                DataNascimento = DateTime.UtcNow,
+                Email = faker.Person.Email.ToLower()
+            };
 
-        [Fact(Skip = "Não implementado")]
-        public void Test_GetById_Retorns_OK()
-        {
-
+            return new StringContent
+                (JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
         }
 
     }
+    public class ClienteResult
+    {
+        public string message { get; set; }
+        public Cliente cliente { get; set; }
+    }
+
 }

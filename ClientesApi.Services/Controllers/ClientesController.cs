@@ -36,7 +36,8 @@ namespace ClientesApi.Services.Controllers
 
                 _clienteRepository.Inserir(cliente);
 
-                return StatusCode(201, new { message = "Cliente cadastrado com sucesso!" });
+                return StatusCode(201, new { message = "Cliente cadastrado com sucesso!", cliente });
+                
             }
             catch (Exception ex)
             {
@@ -46,27 +47,77 @@ namespace ClientesApi.Services.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put()
+        public IActionResult Put(ClientePutRequest request)
         {
-            return Ok();
+            try
+            {
+                var cliente = _clienteRepository.BuscarPorId(request.IdCliente);
+                if (cliente == null)
+                    return StatusCode(422, new { message = "Cliente não encontrado." });
+
+                cliente.Cpf = request.Cpf;
+                cliente.Nome = request.Nome;
+                cliente.DataNascimento = request.DataNascimento;
+                cliente.Email = request.Email;
+
+                _clienteRepository.Alterar(cliente);
+
+                return StatusCode(200, new { message = "Cliente atualizado com sucesso", cliente });
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ex.Message });
+            }
         }
 
         [HttpDelete("{idCliente}")]
         public IActionResult Delete(Guid idCliente)
         {
-            return Ok();
+            try
+            {
+                var cliente = _clienteRepository.BuscarPorId(idCliente);
+                if (cliente == null)
+                    return StatusCode(422, new { message = "Cliente não encontrado." });
+
+                _clienteRepository.Deletar(cliente);
+
+                return StatusCode(200, new { message = "Cliente excluído com sucesso", cliente });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
+            }
         }
 
         [HttpGet]
         public IActionResult GetAll()
         {
-            return Ok();
+            try
+            {
+                var clientes = _clienteRepository.BuscarTodos();
+
+                return StatusCode(200, clientes);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
+            }
         }
 
         [HttpGet("{idCliente}")]
         public IActionResult GetById(Guid idCliente)
         {
-            return Ok();
+            try
+            {
+                var clientes = _clienteRepository.BuscarPorId(idCliente);
+
+                return StatusCode(200, clientes);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new { message = e.Message });
+            }
         }
     }
 }
