@@ -52,5 +52,10 @@ namespace ClientesApi.Infra.Data.Repositories
             return _sqlServerContext.Cliente
                 .FirstOrDefault(c => c.Email.Equals(email));
         }
+        public Cliente BuscarPorCpf(string cpf)
+        {
+            return _sqlServerContext.Cliente
+                .FirstOrDefault(c => c.Cpf.Equals(cpf));
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace ClientesApi.Tests.Config
     {
         public static string GetEndpoint()
         {
-            return "http://clientesapis-001-site1.itempurl.com/api";
+            return "http://clienteapis-001-site1.itempurl.com/api";
         }
     }
 }

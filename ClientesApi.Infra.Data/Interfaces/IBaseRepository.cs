@@ -12,7 +12,6 @@ namespace ClientesApi.Infra.Data.Interfaces
         void Inserir(TEntity entity);
         void Alterar(TEntity entity);
         void Deletar(TEntity entity);
-
         List<TEntity> BuscarTodos();
         TEntity BuscarPorId(Guid id);
     }

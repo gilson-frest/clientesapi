@@ -1,5 +1,4 @@
 using ClientesApi.Services.Requests;
-//using Bogus;
 using FluentAssertions;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -13,6 +12,7 @@ using System.Text;
 using ClientesApi.Tests.Config;
 using ClientesApi.Infra.Data.Entities;
 using Bogus;
+using Bogus.Extensions.Brazil;
 
 namespace ClientesApi.Tests
 {
@@ -29,20 +29,7 @@ namespace ClientesApi.Tests
         public async Task<ClienteResult> Test_Post_Returns_Ok()
         {
             var httpClient = new HttpClient();
-            /*
-            var faker = new Faker("pt_BR");
 
-            var request = new ClientePostRequest()
-            {
-                Nome = faker.Person.FullName,
-                Cpf = "12345678901",
-                DataNascimento = DateTime.UtcNow,
-                Email = faker.Person.Email.ToLower()
-            };
-
-            var Content = new StringContent
-                (JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-            */
             var response = await httpClient.PostAsync(_endpoint, CreateDadosDeCliente());
 
             response
@@ -69,8 +56,8 @@ namespace ClientesApi.Tests
             {
                 IdCliente = result.cliente.IdCliente,
                 Nome = faker.Person.FullName,
-                Cpf = "12345678902",
-                DataNascimento = DateTime.UtcNow,
+                Cpf = faker.Person.Cpf(),
+                DataNascimento = new System.DateTime(1999, 6, 3, 22, 15, 0),
                 Email = faker.Person.Email.ToLower()
             };
 
@@ -97,7 +84,6 @@ namespace ClientesApi.Tests
                .StatusCode
                .Should()
                .Be(HttpStatusCode.OK);
-
         }
 
         [Fact]
@@ -134,6 +120,7 @@ namespace ClientesApi.Tests
                 .NotBeNull();
 
         }
+
         private StringContent CreateDadosDeCliente()
         {
             var faker = new Faker("pt_BR");
@@ -141,8 +128,8 @@ namespace ClientesApi.Tests
             var request = new ClientePostRequest()
             {
                 Nome = faker.Person.FullName,
-                Cpf = "12345678901",
-                DataNascimento = DateTime.UtcNow,
+                Cpf = faker.Person.Cpf(),
+                DataNascimento = new System.DateTime(1996, 6, 3, 22, 15, 0),
                 Email = faker.Person.Email.ToLower()
             };
 

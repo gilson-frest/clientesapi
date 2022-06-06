@@ -4,9 +4,6 @@ namespace ClientesApi.Services.Requests
 {
     public class ClientePostRequest
     {
-        //[Required(ErrorMessage = "Campo obrigatório.")]
-        //public Guid IdCliente { get; set; }
-
         [Required(ErrorMessage = "Campo obrigatório.")]
         public string Nome { get; set; }
 

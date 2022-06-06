@@ -25,6 +25,23 @@ namespace ClientesApi.Services.Controllers
                 if (_clienteRepository.BuscarPorEmail(request.Email) != null)
                     return StatusCode(422, new { message = "O email informado já está cadastrado." });
 
+                if (_clienteRepository.BuscarPorCpf(request.Cpf) != null)
+                    return StatusCode(422, new { message = "O CPF informado já está cadastrado." });
+
+                
+                //Verificar a idade do cliente
+                DateTime dataAtual = DateTime.Now;
+                int idade = dataAtual.Year - request.DataNascimento.Year;
+                if (dataAtual.Month < request.DataNascimento.Month || (dataAtual.Month == request.DataNascimento.Month && dataAtual.Day < request.DataNascimento.Day))
+                {
+                    idade--;
+                }
+
+                if (idade < 18)
+                {
+                    return StatusCode(422, new { message = "Cliente menor de idade!" });
+                }
+
                 var cliente = new Cliente()
                 {
                     IdCliente = Guid.NewGuid(),

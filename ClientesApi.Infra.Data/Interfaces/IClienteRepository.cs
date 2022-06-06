@@ -10,5 +10,6 @@ namespace ClientesApi.Infra.Data.Interfaces
     public interface IClienteRepository: IBaseRepository<Cliente>
     {
         Cliente BuscarPorEmail(String email);
+        Cliente BuscarPorCpf(String cpf);
     }
 }
